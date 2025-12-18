@@ -45,7 +45,7 @@ const initDB = async () => {
         obj.geometry = response.features[0].geometry;
         
         // ⚠️ YOUR OWNER ID
-        obj.owner = '69195c05776c251b15e435c8'; 
+        obj.owner = '6943a08bb9a78871e721c7d3'; 
 
         console.log(`✅ Geocoded: ${obj.location}`);
     } catch (e) {
