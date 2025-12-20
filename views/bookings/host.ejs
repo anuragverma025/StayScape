@@ -1,0 +1,87 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4">
+    <div class="col-10 offset-1">
+        <h2 class="mb-4 fw-bold">Host Dashboard</h2>
+        <p class="text-muted">Manage booking requests for your properties.</p>
+
+        <% if(bookings.length === 0) { %>
+            <div class="alert alert-secondary text-center p-5" role="alert">
+                <h4>No booking requests yet.</h4>
+                <p>When someone wants to book your listing, it will show up here.</p>
+            </div>
+        <% } else { %>
+            
+            <div class="table-responsive shadow-sm rounded">
+                <table class="table table-hover align-middle bg-white mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" class="py-3 ps-4">Property</th>
+                            <th scope="col" class="py-3">Guest</th>
+                            <th scope="col" class="py-3">Dates</th>
+                            <th scope="col" class="py-3">Status</th>
+                            <th scope="col" class="py-3 text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let booking of bookings) { %>
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <img src="<%= booking.listing.image.url %>" 
+                                             alt="img" 
+                                             class="rounded me-3" 
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                        <span class="fw-semibold"><%= booking.listing.title %></span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <i class="fa-regular fa-user me-2 text-muted"></i>
+                                    <%= booking.user.username %>
+                                </td>
+
+                                <td>
+                                    <small class="d-block text-muted">In: <%= booking.checkIn.toLocaleDateString('en-IN') %></small>
+                                    <small class="d-block text-muted">Out: <%= booking.checkOut.toLocaleDateString('en-IN') %></small>
+                                </td>
+
+                                <td>
+                                    <span class="badge rounded-pill 
+                                        <%= booking.status === 'Pending' ? 'bg-warning text-dark' : '' %>
+                                        <%= booking.status === 'Confirmed' ? 'bg-success' : '' %>
+                                        <%= booking.status === 'Cancelled' ? 'bg-danger' : '' %>">
+                                        <%= booking.status %>
+                                    </span>
+                                </td>
+
+                                <td class="text-end pe-4">
+                                    <% if(booking.status === "Pending") { %>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <form action="/bookings/<%= booking._id %>/status?_method=PATCH" method="POST">
+                                                <input type="hidden" name="status" value="Confirmed">
+                                                <button class="btn btn-sm btn-success">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
+                                            </form>
+
+                                            <form action="/bookings/<%= booking._id %>/status?_method=PATCH" method="POST">
+                                                <input type="hidden" name="status" value="Cancelled">
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <% } else { %>
+                                        <span class="text-muted fst-italic">Completed</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+        <% } %>
+    </div>
+</div>

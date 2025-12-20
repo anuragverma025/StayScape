@@ -1,5 +1,6 @@
 const Listing = require("../models/listing");
 const maptilerClient = require("@maptiler/client");
+const Booking = require("../models/booking");
 maptilerClient.config.apiKey = process.env.MAP_TOKEN;
 // const ExpressError = require("../utils/ExpressError.js");
 
@@ -118,4 +119,24 @@ module.exports.destroyListing = async (req, res) => {
     console.log(deletedListing);
     req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
+};
+
+// In controllers/listings.js
+module.exports.createBooking = async (req, res) => {
+    let { id } = req.params;
+    let { booking } = req.body; // Extract the booking object containing dates
+
+    const listing = await Listing.findById(id);
+    
+    const newBooking = new Booking({
+        listing: listing._id,
+        user: req.user._id,
+        checkIn: booking.checkIn,   // Save Check-in
+        checkOut: booking.checkOut  // Save Check-out
+    });
+
+    await newBooking.save();
+    
+    req.flash("success", "Booking Request Sent! The host will contact you shortly.");
+    res.redirect(`/listings/${id}`);
 };

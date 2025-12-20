@@ -150,8 +150,8 @@ body {
 }
 
 #map {
-    height: 400px;
-    width: 100vh;
+    height: 400px;  /* Keep the height fixed */
+    width: 100%;    /* Width fits the container (which we just fixed in Step 1) */
     border-radius: 10px;
 }
 

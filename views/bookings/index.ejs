@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4">
+    <div class="col-8 offset-2">
+        <h2 class="mb-4 fw-bold">My Trips</h2>
+        
+        <% if(bookings.length === 0) { %>
+            <div class="alert alert-light border shadow-sm text-center p-5" role="alert">
+                <h4 class="alert-heading mb-3">No trips booked... yet!</h4>
+                <p class="mb-4">Time to dust off your bags and start planning your next adventure.</p>
+                <a href="/listings" class="btn btn-danger rounded-pill px-4">Start Exploring</a>
+            </div>
+        <% } else { %>
+            
+            <div class="row">
+                <% for(let booking of bookings) { %>
+                    <div class="col-12 mb-4">
+                        <div class="card mb-3 border-0 shadow-sm" style="overflow: hidden;">
+                            <div class="row g-0">
+                                
+                                <div class="col-md-4">
+                                    <img src="<%= booking.listing.image.url %>" 
+                                         class="img-fluid rounded-start h-100 w-100" 
+                                         alt="listing image" 
+                                         style="object-fit: cover; min-height: 200px;">
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <div class="card-body h-100 d-flex flex-column justify-content-between">
+                                        
+                                        <div>
+                                            <h5 class="card-title fw-bold fs-4 mb-1">
+                                                <%= booking.listing.title %>
+                                            </h5>
+                                            <p class="card-text text-muted mb-2">
+                                                <i class="fa-solid fa-location-dot text-danger"></i> 
+                                                <%= booking.listing.location %>, <%= booking.listing.country %>
+                                            </p>
+                                        </div>
+
+                                        <div class="bg-light rounded p-2 mt-2 mb-2 d-flex justify-content-between align-items-center" style="max-width: 400px;">
+                                            <div class="text-center">
+                                                <small class="text-muted d-block">Check-In</small>
+                                                <span class="fw-semibold">
+                                                    <%= booking.checkIn.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                                </span>
+                                            </div>
+                                            <div class="text-muted"><i class="fa-solid fa-arrow-right"></i></div>
+                                            <div class="text-center">
+                                                <small class="text-muted d-block">Check-Out</small>
+                                                <span class="fw-semibold">
+                                                    <%= booking.checkOut.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-end mt-2">
+                                            <div>
+                                                <span class="badge rounded-pill 
+                                                    <%= booking.status === 'Pending' ? 'text-bg-warning' : 'text-bg-success' %> 
+                                                    px-3 py-2">
+                                                    <%= booking.status %>
+                                                </span>
+                                            </div>
+                                            
+                                            <a href="/listings/<%= booking.listing._id %>" class="btn btn-sm btn-outline-dark">
+                                                View Listing
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+            
+        <% } %>
+    </div>
+</div>
