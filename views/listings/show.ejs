@@ -60,13 +60,19 @@
         </div>
     </div>
 
-    <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
-    <div class="btns">
-        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
+   <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+    <div class="row mb-3">
+        <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+            <div class="d-flex justify-content-start gap-3">
+                
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-danger" style="min-width: 80px;">Edit</a>
+                
+                <form method="post" action="/listings/<%= listing._id%>?_method=DELETE">
+                    <button class="btn btn-dark" style="min-width: 80px;">Delete</button>
+                </form>
 
-        <form method="post" action="/listings/<%= listing._id%>?_method=DELETE">
-            <button class="btn btn-dark offset-5">Delete</button>
-        </form>
+            </div>
+        </div>
     </div>
     <% } %>
 
