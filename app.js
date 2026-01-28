@@ -1,10 +1,10 @@
 if(process.env.NODE_ENV != "production"){
     require('dotenv').config();
 }
-// console.log(process.env.SECRET);
 
 const express = require("express");
-const app = express();
+const app = express(); 
+app.get('/images/favicon.ico', (req, res) => res.status(204).end());
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
@@ -21,8 +21,6 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const bookingsRouter = require("./routes/booking.js");
-
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 const dbURL = process.env.ATLASDB_URL;
 
@@ -89,36 +87,20 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.get("/demouser", async (req, res) => {
-//     let fakeUser = new User({
-//         email: "Mohit@gmail.com",
-//         username: "Mohit"
-//     });
-
-//     let registeredUser = await User.register(fakeUser, "passcod");
-//     res.send(registeredUser);
-// });
-
-
-// ...existing code...
 app.use((req, res, next) => {
     console.log("REQ:", req.method, req.originalUrl, "Referer:", req.get("referer"));
     next();
 });
-// ...existing code...
-
 
 app.use("/listings", listingRouter);
 app.use("/bookings", bookingsRouter);
-app.use("/listings/:id/review", reviewRouter);
+app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
-// Ignore Chrome's annoying request
 app.get("/.well-known/appspecific/com.chrome.devtools.json", (req, res) => {
-    res.sendStatus(204); // Send "No Content" (success, but empty)
+    res.sendStatus(204);
 });
 
-// Add this line to stop the noise:
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 app.use((req, res, next) => {
