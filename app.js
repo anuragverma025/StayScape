@@ -65,9 +65,6 @@ const sessionOptions = {
     },
 };
 
-app.get("/", (req, res) => {
-    res.redirect("/listings"); 
-});
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -92,6 +89,11 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/", (req, res) => {
+    res.redirect("/listings"); 
+});
+
+
 app.use("/listings", listingRouter);
 app.use("/bookings", bookingsRouter);
 app.use("/listings/:id/reviews", reviewRouter);
@@ -101,6 +103,14 @@ app.get("/.well-known/appspecific/com.chrome.devtools.json", (req, res) => {
     res.sendStatus(204);
 });
 
+app.get("/privacy", (req, res) => {
+    res.render("includes/privacy.ejs");
+});
+
+app.get("/terms", (req, res) => {
+    res.render("includes/terms.ejs");
+});
+
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 app.use((req, res, next) => {
@@ -108,7 +118,7 @@ app.use((req, res, next) => {
     next(new ExpressError("page not found", 404));
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     let { statusCode = 500, message = "something went wrong"} = err;
     if (typeof statusCode !== "number" ){
         const parsed = Number(statusCode);

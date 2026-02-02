@@ -24,10 +24,7 @@ module.exports.index = async (req, res) => {
     if (category) {
         dbQuery.category = category;
     }
-
-    // 5. Fetch data using the built query
-    // If dbQuery is empty, it finds ALL listings.
-    // If it has 'category', it finds only that category.
+    
     const allListings = await Listing.find(dbQuery);
 
     // Optional Debug
@@ -35,11 +32,9 @@ module.exports.index = async (req, res) => {
         console.log("Image Data Check:", allListings[0].image); 
     }
 
-    // 6. Render the page (pass 'category' so we can highlight the icon if needed)
     res.render("listings/index.ejs", { allListings, category });
 };
 
-// This function stays exactly the same
 module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs");
 };
@@ -59,9 +54,6 @@ module.exports.showListings = async (req, res) => { // Added 'next'
          return res.redirect("/listings");
     }
     
-    // if (!listing) { // <-- ADD THIS CHECK
-    //     throw new ExpressError(404, "Listing you requested does not exist!");
-    // }
     console.log(listing);
     res.render("listings/show.ejs", { listing });
 };
